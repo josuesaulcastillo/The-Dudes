@@ -34,4 +34,19 @@ public class Bishop extends Piece {
         return moves;
     }
 
+    @Override
+    public List<Position> possibleMoves(Board board) {
+        checkBoard(board);
+        List<Position> moves = new ArrayList<>();
+        int file = fileIndex(getPosition());
+        int rank = getPosition().getRank();
+        if (!isOnBoard(file, rank)) return moves;
+
+        addSlidingMoves(board, moves, 1, 1);
+        addSlidingMoves(board, moves, 1, -1);
+        addSlidingMoves(board, moves, -1, 1);
+        addSlidingMoves(board, moves, -1, -1);
+        return moves;
+    }
+
 }
