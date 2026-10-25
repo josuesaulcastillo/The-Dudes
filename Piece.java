@@ -13,7 +13,7 @@ public Piece(Color color, Position position){
     this.position = position;
 }
 
-public void Position(Position position){
+public void setPosition(Position position){
     this.Position = position;
 }
 
