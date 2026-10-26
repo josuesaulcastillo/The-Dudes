@@ -48,7 +48,7 @@ protected Position positionAt(int file, int rank) {
 
 protected boolean canMoveTo(Board board, Position destination) {
         Piece target = board.getPiece(destination);
-        return target == null || !color.isColor(target.getColor());
+    return target == null || (target.getColor() != null && !color.isColor(target.getColor()));
     }
 
 /** Adds squares in one direction, including an enemy piece but stopping at any piece. */
