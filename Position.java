@@ -56,7 +56,7 @@ public class Position {
      * @param file String of the vertical file ranging from A to G.
      */
     public void setFile(String file) {
-        
+        this.file = file;
     }
 
     /**
@@ -65,7 +65,7 @@ public class Position {
      * @param file int of the vertical file ranging from 1 to 8.
      */
     public void setFile(int fileNum) {
-        
+        this.file = FILES.substring(fileNum - 2, fileNum - 1);        
     }
 
     /**
@@ -74,7 +74,7 @@ public class Position {
      * @param rank int of the  horizontal rank ranging from 1 to 8.
      */
     public void setRank(int rank) {
-        
+        this.rank = rank;
     }
 
     /**
@@ -102,6 +102,24 @@ public class Position {
      */
     public String getPosition() {
         return file + rank;
+    }
+
+    /**
+     * Returns the piece at the position.
+     * 
+     * @return Piece at the position
+     */
+    public Piece getPiece() {
+        return piece;
+    }
+
+    /**
+     * Sets a piece at this position.
+     * 
+     * @param piece Piece to put at this position
+     */
+    public void setPiece(Piece piece) {
+        this.piece = piece;
     }
 
 }
