@@ -15,7 +15,41 @@ public class Queen extends Piece {
      */
     @Override
     public List<Position> possibleMoves() {
-        return new ArrayList<>();
+        List<Position> moves = new ArrayList<>();
+        int file = fileIndex(getPosition());
+        int rank = getPosition().getRank();
+        if (!isOnBoard(file, rank)) return moves;
+
+        for (int df = -1; df <= 1; df++) {
+            for (int dr = -1; dr <= 1; dr++) {
+                if (df == 0 && dr == 0) continue;
+                int f = file + df;
+                int r = rank + dr;
+                while (isOnBoard(f, r)) {
+                    moves.add(positionAt(f, r));
+                    f += df;
+                    r += dr;
+                }
+            }
+        }
+        return moves;
+    }
+
+    @Override
+    public List<Position> possibleMoves(Board board) {
+        checkBoard(board);
+        List<Position> moves = new ArrayList<>();
+        int file = fileIndex(getPosition());
+        int rank = getPosition().getRank();
+        if (!isOnBoard(file, rank)) return moves;
+
+        for (int df = -1; df <= 1; df++) {
+            for (int dr = -1; dr <= 1; dr++) {
+                if (df == 0 && dr == 0) continue;
+                addSlidingMoves(board, moves, df, dr);
+            }
+        }
+        return moves;
     }
 
 }

@@ -15,7 +15,22 @@ public class King extends Piece {
      */
     @Override
     public List<Position> possibleMoves() {
-        return new ArrayList<>();
+        List<Position> moves = new ArrayList<>();
+        int file = fileIndex(getPosition());
+        int rank = getPosition().getRank();
+        if (!isOnBoard(file, rank)) return moves;
+
+        for (int df = -1; df <= 1; df++) {
+            for (int dr = -1; dr <= 1; dr++) {
+                if (df == 0 && dr == 0) continue;
+                int f = file + df;
+                int r = rank + dr;
+                if (!isOnBoard(f, r)) continue;
+                Position destination = positionAt(f, r);
+                if (canMoveTo(board, destination)) moves.add(destination);
+            }
+        }
+        return moves;
     }
 
 }
