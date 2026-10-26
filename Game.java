@@ -25,9 +25,9 @@ public class Game {
      */
     public Game() {
         board = new Board();
-        whitePlayer = new Player(Color.WHITE);
-        blackPlayer = new Player(Color.BLACK);
-        currentTurn = Color.WHITE;
+        whitePlayer = new Player(new Color("white"));
+        blackPlayer = new Player(new Color("black"));
+        currentTurn = new Color("white");
         gameRunning = false;
     }
 
@@ -35,7 +35,7 @@ public class Game {
      * Starts the chess game.
      */
     public void start() {
-        currentTurn = Color.WHITE;
+        currentTurn = new Color("white");
         gameRunning = true;
 
         System.out.println("Welcome to Chess!");
@@ -46,7 +46,7 @@ public class Game {
 
     /**
      * Ends the chess game.
-     * Announces the winner or a draw.
+     * Announces that the game is over.
      */
     public void end() {
         gameRunning = false;
@@ -63,24 +63,24 @@ public class Game {
 
             board.display();
 
-            System.out.println(currentTurn + "'s turn.");
+            System.out.println(currentTurn.color + "'s turn.");
 
             if (board.isCheckmate(currentTurn)) {
-                System.out.println(currentTurn + " is in checkmate!");
+                System.out.println(currentTurn.color + " is in checkmate!");
                 end();
                 break;
             }
 
             if (board.isCheck(currentTurn)) {
-                System.out.println(currentTurn + " is in check!");
+                System.out.println(currentTurn.color + " is in check!");
             }
 
-            if (currentTurn == Color.WHITE) {
+            if (currentTurn.isColor("white")) {
                 whitePlayer.makeMove(board);
-                currentTurn = Color.BLACK;
+                currentTurn = new Color("black");
             } else {
                 blackPlayer.makeMove(board);
-                currentTurn = Color.WHITE;
+                currentTurn = new Color("white");
             }
         }
     }
