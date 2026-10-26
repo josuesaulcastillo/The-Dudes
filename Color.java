@@ -10,11 +10,11 @@ public class Color {
      * @param color String that MUST be "black" or "white"
      */
     public Color(String color) {
-        if(color.equals("white") || color.equals("black")) {
-            this.color = color;
-        }
-        else {
-            System.out.println("Invalid color.");
+        String normalized = color == null ? null : color.trim().toLowerCase();
+        if ("white".equals(normalized) || "black".equals(normalized)) {
+            this.color = normalized;
+        } else {
+            throw new IllegalArgumentException("Invalid color: " + color);
         }
     }
 
@@ -25,12 +25,10 @@ public class Color {
      * @return Boolean stating whether this color equals another color
      */
     public boolean isColor(String other) {
-        if (this.color.equals(other)) {
-            return true;
-        }
-        else {
+        if (other == null) {
             return false;
         }
+        return this.color != null && this.color.equals(other.trim().toLowerCase());
     }
 
     /**
@@ -40,11 +38,9 @@ public class Color {
      * @return Boolean stating whether this color equals another color
      */
     public boolean isColor(Color other) {
-        if (this.color.equals(other.color)) {
-            return true;
-        }
-        else {
+        if (other == null || this.color == null || other.color == null) {
             return false;
         }
+        return this.color.equals(other.color);
     }
 }
