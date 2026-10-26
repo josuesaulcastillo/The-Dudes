@@ -29,6 +29,9 @@ public class Rook extends Piece {
         return moves;
     }
 
+    /**
+     * puts possible moves into a list
+     */
     @Override
     public List<Position> possibleMoves(Board board) {
         checkBoard(board);

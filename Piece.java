@@ -14,7 +14,7 @@ public Piece(Color color, Position position){
 }
 
 public void setPosition(Position position){
-    this.Position = position;
+    this.position = position;
 }
 
 public Color getColor(){

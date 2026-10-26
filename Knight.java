@@ -3,6 +3,11 @@ import java.util.List;
 
 public class Knight extends Piece {
 
+    private static final int[][] OFFSETS = {
+        {1, 2}, {2, 1}, {2, -1}, {1, -2},
+        {-1, -2}, {-2, -1}, {-2, 1}, {-1, 2}
+    };
+
     /**
      * creates Knight piece
      */
