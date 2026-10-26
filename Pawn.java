@@ -15,58 +15,6 @@ public class Pawn extends Piece {
      */
     @Override
     public List<Position> possibleMoves() {
-        List<Position> moves = new ArrayList<>();
-        int file = fileIndex(getPosition());
-        int rank = getPosition().getRank();
-        if (!isOnBoard(file, rank)) return moves;
-
-        int direction = getColor().isColor("white") ? 1 : -1;
-        int nextRank = rank + direction;
-        if (!isOnBoard(file, nextRank)) return moves;
-
-        moves.add(positionAt(file, nextRank));
-        int startingRank = direction == 1 ? 2 : 7;
-        int twoStepRank = rank + 2 * direction;
-        if (rank == startingRank && isOnBoard(file, twoStepRank)) {
-            moves.add(positionAt(file, twoStepRank));
-        }
-        if (file > 0) moves.add(positionAt(file - 1, nextRank));
-        if (file < 7) moves.add(positionAt(file + 1, nextRank));
-        return moves;
-    }
-
-    @Override
-    public List<Position> possibleMoves(Board board) {
-        checkBoard(board);
-        List<Position> moves = new ArrayList<>();
-        int file = fileIndex(getPosition());
-        int rank = getPosition().getRank();
-        if (!isOnBoard(file, rank)) return moves;
-
-        int direction = getColor().isColor("white") ? 1 : -1;
-        int nextRank = rank + direction;
-        if (!isOnBoard(file, nextRank)) return moves;
-
-        Position forward = positionAt(file, nextRank);
-        if (board.getPiece(forward) == null) {
-            moves.add(forward);
-            int startingRank = direction == 1 ? 2 : 7;
-            int twoStepRank = rank + 2 * direction;
-            if (rank == startingRank && isOnBoard(file, twoStepRank)) {
-                Position twoForward = positionAt(file, twoStepRank);
-                if (board.getPiece(twoForward) == null) moves.add(twoForward);
-            }
-        }
-
-        for (int df : new int[] {-1, 1}) {
-            int targetFile = file + df;
-            if (!isOnBoard(targetFile, nextRank)) continue;
-            Position diagonal = positionAt(targetFile, nextRank);
-            Piece target = board.getPiece(diagonal);
-            if (target != null && !getColor().isColor(target.getColor())) {
-                moves.add(diagonal);
-            }
-        }
-        return moves;
+        return new ArrayList<>();
     }
 }
