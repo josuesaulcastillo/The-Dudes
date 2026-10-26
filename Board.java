@@ -79,6 +79,42 @@ public class Board {
     }
 
     /**
+     * Places pieces at 
+     */
+    public void placePiece(Piece piece) {
+        if (piece == null || piece.getPosition() == null) {
+            throw new IllegalArgumentException("Piece and position must not be null.");
+        }
+
+        Position position = piece.getPosition();
+        String fileName = position.getFile();
+        int rank = position.getRank();
+
+        if (fileName == null || fileName.length() != 1
+                || rank < 1 || rank > 8) {
+            throw new IllegalArgumentException("Position must be on the board.");
+        }
+
+        int file = Character.toUpperCase(fileName.charAt(0)) - 'A';
+        if (file < 0 || file >= 8) {
+            throw new IllegalArgumentException("File must be between A and H.");
+        }
+
+        Position square = board[file][rank - 1];
+        if (square == null) {
+            square = new Position(String.valueOf((char) ('A' + file)), rank);
+            board[file][rank - 1] = square;
+        }
+
+        if (square.getPiece() != null) {
+            throw new IllegalStateException("Square is already occupied.");
+        }
+
+        square.setPiece(piece);
+        piece.setPosition(square);
+    }
+
+    /**
      * Prints the current board state to the terminal.
      */
     public void display() {
