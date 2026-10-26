@@ -41,45 +41,9 @@ public class Game {
         System.out.println("Welcome to Chess!");
         System.out.println("White moves first.");
 
-        initializePieces();
+        board.initializePieces();
 
         play();
-    }
-
-    private void initializePieces() {
-        Color white = new Color("white");
-        Color black = new Color("black");
-        String[] files = {"A", "B", "C", "D", "E", "F", "G", "H"};
-
-        Piece[] whiteBackRank = {
-            new Rook(white, new Position("A", 1)),
-            new Knight(white, new Position("B", 1)),
-            new Bishop(white, new Position("C", 1)),
-            new Queen(white, new Position("D", 1)),
-            new King(white, new Position("E", 1)),
-            new Bishop(white, new Position("F", 1)),
-            new Knight(white, new Position("G", 1)),
-            new Rook(white, new Position("H", 1))
-        };
-
-        Piece[] blackBackRank = {
-            new Rook(black, new Position("A", 8)),
-            new Knight(black, new Position("B", 8)),
-            new Bishop(black, new Position("C", 8)),
-            new Queen(black, new Position("D", 8)),
-                new King(black, new Position("E", 8)),
-                new Bishop(black, new Position("F", 8)),
-                new Knight(black, new Position("G", 8)),
-                new Rook(black, new Position("H", 8))
-            };
-
-            for (int i = 0; i < files.length; i++) {
-                board.placePiece(whiteBackRank[i]);
-                board.placePiece(new Pawn(white, new Position(files[i], 2)));
-
-                board.placePiece(new Pawn(black, new Position(files[i], 7)));
-                board.placePiece(blackBackRank[i]);
-            }
     }
     /**
      * Ends the chess game.
