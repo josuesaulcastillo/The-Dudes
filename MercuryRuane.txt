@@ -1,0 +1,49 @@
+https://chatgpt.com/share/6adebdbd-4654-83ea-bc6e-e4c737ed3267
+### Pushing from local to remote
+- Asked: I am on local branch MR-branch in a github repositiory with multiple branches. I've committed 2 files locally using git commit. How do I put these files on the remote version of MR-branch?
+- Used or changed: Followed the terminal directions
+- Result or feedback: Had some errors, fixed with more questions to ChatGPT
+- AI created the commit: No
+
+### Syncing the branch to the main
+- Asked: How do I update my MR branch to keep up with changes others have made to the dev branch? Please give both the terminal and web way
+- Used or changed: Followed terminal commands
+- Result or feedback: Gave good info but could've explained better
+- AI created the commit: No
+
+### Delete push to main
+- Asked: How do I delete a push to main on the web? One of my teammates accidentally pushed there. Can they or I undo it?
+- Used or changed: Tried several things, but it gave too many issues, so I gave up on it
+- Result or feedback: Hallucinated a "revert" option on the web
+- AI created the commit: No
+
+### Restore stashed files
+- Asked: How do I get stashed changes back for certain files?
+- Used or changed: Used the stash commands in terminal
+- Result or feedback: Good explanation of stashes
+- AI created the commit: No
+
+### Syncing local and remote branch un VSCode
+- Asked: How do I update the code in a branch local files ot match remote files in vscode?
+- Used or changed: Followed directions using Source Control 
+- Result or feedback: Asked too many follow-up questions
+- AI created the commit: No
+
+### Fix AI-generated Main file so it uses other classes instead of doing everything in the Main file
+- Asked: Fix Main.java to use the other files in the repo instead of doing everything itself. Don't change any other files. If something needs to be added to another file, let me know and give me the code, but do not implement it.
+- Used or changed: Used the main file
+- Result or feedback: Caused further issues (see below)
+- AI created the commit: Yes
+
+### Caused multiple small logic issues that needed fixed
+- Asked: Fix everything so that it works with minimal changes to the code and give me a step-by-step of what you change.
+- Used or changed: 
+Board logic, game init, piece/color comparisons, player input flow, piece movement rules
+- Result or feedback: Cleaned some things up and got it working, but it caused some mismatch between the branch it made and dev that was hard to resolve (see below)
+- AI created the commit: yes
+
+### Fix duplicate board init
+- Asked: Fix whatever is causing a duplicated square error
+- Used or changed: Used the clearBoard method
+- Result or feedback: Fixed the error but took a long time
+- AI created the commit: Yes
