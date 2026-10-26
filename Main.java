@@ -74,6 +74,7 @@ public class Main {
             makeMove(fromRow, fromCol, toRow, toCol);
             whiteTurn = !whiteTurn;
         }
+        input.close();
     }
 
     /** Places all 32 pieces on their normal starting squares. */
