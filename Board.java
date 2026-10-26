@@ -22,6 +22,8 @@ public class Board {
      * Initializes the board with the standard chess starting positions.
      */
     public void initializePieces() {
+        clearBoard();
+
         Color white = new Color("white");
         Color black = new Color("black");
 
@@ -50,9 +52,17 @@ public class Board {
         }
     }
 
+    private void clearBoard() {
+        for (int file = 0; file < board.length; file++) {
+            for (int rank = 0; rank < board[file].length; rank++) {
+                board[file][rank].setPiece(null);
+            }
+        }
+    }
+
     private void placePiece(Piece piece, String file, int rank) {
         Position location = getBoardPosition(new Position(file, rank));
-        if (location == null) {
+        if (location == null || location.getPiece() != null) {
             return;
         }
         location.setPiece(piece);
