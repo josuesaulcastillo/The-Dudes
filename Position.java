@@ -1,9 +1,11 @@
+import java.util.Objects;
+
 public class Position {
     private int rank;
     private String file;
     private Piece piece;
 
-    private static final String FILES = "ABCDEFG";
+    private static final String FILES = "ABCDEFGH";
 
 
     /**
@@ -27,7 +29,7 @@ public class Position {
      * @param piece Piece specifying which Piece is at the specified position
      */
     public Position(int file, int rank, Piece piece) {
-        this(FILES.substring(file - 2, file - 1), rank, piece);
+        this(fileName(file), rank, piece);
     }
 
     /**
@@ -47,7 +49,14 @@ public class Position {
      * @param rank int taking the vertical column ("rank") of the position
      */
     public Position(int file, int rank) {
-        this(FILES.substring(file - 2, file - 1), rank, null);
+        this(fileName(file), rank, null);
+    }
+
+    private static String fileName(int file) {
+        if (file < 1 || file > 8) {
+            throw new IllegalArgumentException("File must be between 1 and 8.");
+        }
+        return FILES.substring(file - 1, file);
     }
 
     /**
@@ -65,7 +74,7 @@ public class Position {
      * @param file int of the vertical file ranging from 1 to 8.
      */
     public void setFile(int fileNum) {
-        this.file = FILES.substring(fileNum - 2, fileNum - 1);        
+        this.file = fileName(fileNum);
     }
 
     /**
@@ -122,4 +131,23 @@ public class Position {
         this.piece = piece;
     }
 
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (!(other instanceof Position)) {
+            return false;
+        }
+
+        Position position = (Position) other;
+        return rank == position.rank
+            && file != null && position.file != null
+            && file.equalsIgnoreCase(position.file);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(file == null ? null : file.toUpperCase(), rank);
+    }
 }

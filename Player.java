@@ -52,14 +52,29 @@ public class Player {
      *
      * @param board the chessboard
      */
-    public void makeMove(Board board) {
+    public boolean makeMove(Board board) {
 
-        boolean validMove = false;
+        while (true) {
 
-        while (!validMove) {
-
-            System.out.print("Enter move (example: E2 E4): ");
+            System.out.print("Enter move (example: E2 E4, HELP, or RESIGN): ");
+            if (!input.hasNextLine()) {
+                System.out.println("Input closed. Game ended.");
+                return false;
+            }
             String move = input.nextLine().trim().toUpperCase();
+
+            if (move.equals("RESIGN") || move.equals("QUIT")) {
+                System.out.println(color.color + " resigns. "
+                    + (color.isColor("white") ? "Black" : "White") + " wins.");
+                return false;
+            }
+
+            if (move.equals("HELP")) {
+                System.out.println("Enter FROM TO, for example E2 E4 or G1 F3.");
+                System.out.println("Castling and en passant are not supported.");
+                System.out.println("Pawns promote automatically to queens.");
+                continue;
+            }
 
             String[] positions = move.split("\\s+");
 
@@ -95,15 +110,18 @@ public class Player {
                 continue;
             }
 
-            if (piece.getColor() != color) {
+            if (!piece.getColor().isColor(color)) {
                 System.out.println("You cannot move the other player's piece.");
                 continue;
             }
 
-            board.movePiece(from, to);
-            validMove = true;
+            if (!board.movePiece(from, to)) {
+                System.out.println("Illegal move. Try again.");
+                continue;
+            }
 
             System.out.println("Move completed.");
+            return true;
         }
     }
 }

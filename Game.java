@@ -63,10 +63,14 @@ public class Game {
 
             board.display();
 
-            System.out.println(currentTurn.color + "'s turn.");
-
-            if (board.isCheckmate(currentTurn)) {
-                System.out.println(currentTurn.color + " is in checkmate!");
+            if (!board.hasLegalMove(currentTurn)) {
+                if (board.isCheckmate(currentTurn)) {
+                    System.out.println("Checkmate! "
+                        + (currentTurn.isColor("white") ? "Black" : "White")
+                        + " wins.");
+                } else {
+                    System.out.println("Stalemate! The game is a draw.");
+                }
                 end();
                 break;
             }
@@ -75,13 +79,24 @@ public class Game {
                 System.out.println(currentTurn.color + " is in check!");
             }
 
+            String side = currentTurn.isColor("white") ? "White" : "Black";
+            System.out.println(side + "'s turn.");
+
+            boolean moved;
             if (currentTurn.isColor("white")) {
-                whitePlayer.makeMove(board);
-                currentTurn = new Color("black");
+                moved = whitePlayer.makeMove(board);
             } else {
-                blackPlayer.makeMove(board);
-                currentTurn = new Color("white");
+                moved = blackPlayer.makeMove(board);
             }
+
+            if (!moved) {
+                end();
+                break;
+            }
+
+            currentTurn = currentTurn.isColor("white")
+                ? new Color("black")
+                : new Color("white");
         }
     }
 }
