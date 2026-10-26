@@ -57,6 +57,10 @@ public class Player {
         boolean validMove = false;
 
         while (!validMove) {
+            if (!input.hasNextLine()) {
+                System.out.println();
+                return;
+            }
 
             System.out.print("Enter move (example: E2 E4): ");
             String move = input.nextLine().trim().toUpperCase();
@@ -95,7 +99,7 @@ public class Player {
                 continue;
             }
 
-            if (piece.getColor() != color) {
+            if (!piece.getColor().isColor(color)) {
                 System.out.println("You cannot move the other player's piece.");
                 continue;
             }
