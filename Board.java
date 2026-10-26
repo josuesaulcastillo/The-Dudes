@@ -9,10 +9,10 @@ public class Board {
      */
     public Board() {
         board = new Position[8][8];
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                board[i][j].setFile(i);
-                board[i][j].setRank(j);
+        for (int file = 0; file < 8; file++) {
+            for (int rank = 1; rank <= 8; rank++) {
+                board[file][rank - 1] =
+                    new Position(String.valueOf((char) ('A' + file)), rank);
             }
         }
     }
