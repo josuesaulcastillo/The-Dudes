@@ -1,56 +1,47 @@
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
 /**
- * Represents a player in the chess game.
- * Each player has a color and a list of available pieces.
+ * Represents a chess game between two players.
+ * This class manages the board, players, and turns.
  */
-public class Player {
+public class Game {
 
-    /** The color assigned to the player. */
-    private Color color;
+    /** The chessboard used in the game. */
+    private Board board;
 
-    /** The pieces that have not been captured. */
-    private List<Piece> availablePieces;
+    /** The player using the white pieces. */
+    private Player whitePlayer;
 
-    /** Scanner used to read player moves. */
-    private static final Scanner input = new Scanner(System.in);
+    /** The player using the black pieces. */
+    private Player blackPlayer;
+
+    /** Keeps track of whose turn it is. */
+    private Color currentTurn;
 
     /**
-     * Creates a player with the given color.
-     *
-     * @param color the player's color
+     * Creates a new Game object.
      */
-    public Player(Color color) {
-        this.color = color;
-        availablePieces = new ArrayList<>();
+    public Game() {
+
     }
 
     /**
-     * Returns the player's color.
-     *
-     * @return the color of the player
+     * Initializes the chess game.
      */
-    public Color getColor() {
-        return color;
+    public void start() {
+
     }
 
     /**
-     * Returns the player's available pieces.
-     *
-     * @return list of pieces that have not been captured
+     * Ends the game and declares a winner or a draw.
      */
-    public List<Piece> getAvailablePieces() {
-        return availablePieces;
+    public void end() {
+
     }
 
     /**
-     * Reads a move from the player and attempts to
-     * move the piece on the board.
-     *
-     * @param board the chessboard
+     * Runs the main game loop.
+     * Alternates turns, checks for check and checkmate,
+     * and gets moves from the players.
      */
     public void makeMove(Board board) {
 
@@ -115,5 +106,7 @@ public class Player {
                 System.out.println("Move completed.");
             }
         }
+    public void play() {
+
     }
 }
