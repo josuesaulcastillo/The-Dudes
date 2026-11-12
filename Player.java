@@ -104,10 +104,16 @@ public class Player {
                 continue;
             }
 
-            board.movePiece(from, to);
-            validMove = true;
+            if (!piece.canMoveTo(board, to)) {
+                System.out.println("That piece cannot move to that position.");
+                continue;
+            }
 
-            System.out.println("Move completed.");
+            boolean hasMoved = board.movePiece(from, to);
+            if (hasMoved) {
+                validMove = true;
+                System.out.println("Move completed.");
+            }
         }
     }
 }
