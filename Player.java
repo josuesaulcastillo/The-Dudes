@@ -104,10 +104,12 @@ public class Player {
                 continue;
             }
 
-            board.movePiece(from, to);
-            validMove = true;
+            boolean hasMoved = board.movePiece(from, to);
+            if (hasMoved) {
+                validMove = true;
 
-            System.out.println("Move completed.");
+                System.out.println("Move completed.");
+            }
         }
     }
 }

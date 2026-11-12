@@ -1,9 +1,23 @@
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+
 /**
  * Entry point for the chess game.
  */
 public class Main {
-    /** Starts a new chess game. */
+    /** Starts the graphical chess game. */
     public static void main(String[] args) {
-        new Game().start();
+        SwingUtilities.invokeLater(() -> {
+            Board board = new Board();
+            ChessBoardGUI chessBoardGUI = new ChessBoardGUI(board);
+            new ChessPieceMovement(board, chessBoardGUI);
+
+            JFrame frame = new JFrame("Chess");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setContentPane(chessBoardGUI);
+            frame.pack();
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
+        });
     }
 }
