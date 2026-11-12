@@ -135,6 +135,39 @@ public class Board {
         currentPiece.setPosition(toSlot);
         return true;
     }
+
+    /**
+     * Moves a piece to a destination without checking chess rules.
+     * Any piece already at the destination is removed from the board.
+     *
+     * @param from source square
+     * @param to destination square
+     * @return the piece removed from the destination, or null if it was empty
+     */
+    public Piece movePieceWithoutRuleValidation(Position from, Position to) {
+        Position fromSlot = getBoardPosition(from);
+        Position toSlot = getBoardPosition(to);
+        if (fromSlot == null || toSlot == null) {
+            throw new IllegalArgumentException("Both positions must be on the board.");
+        }
+        if (fromSlot == toSlot) {
+            return null;
+        }
+
+        Piece movingPiece = fromSlot.getPiece();
+        if (movingPiece == null) {
+            throw new IllegalStateException("There is no piece at the source position.");
+        }
+
+        Piece capturedPiece = toSlot.getPiece();
+        fromSlot.setPiece(null);
+        toSlot.setPiece(movingPiece);
+        movingPiece.setPosition(toSlot);
+        if (capturedPiece != null) {
+            capturedPiece.setPosition(null);
+        }
+        return capturedPiece;
+    }
     
     /**
      * Returns a boolean of whether a specified color is in check.
