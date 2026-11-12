@@ -103,36 +103,37 @@ public class Board {
      * @param from the original position of the piece
      * @param to the position to move the piece to
      */
-    public void movePiece(Position from, Position to) {
+    public boolean movePiece(Position from, Position to) {
         Position fromSlot = getBoardPosition(from);
         Position toSlot = getBoardPosition(to);
         if (fromSlot == null || toSlot == null) {
             System.out.println("Invalid board position.");
-            return;
+            return false;
         }
 
         Piece currentPiece = fromSlot.getPiece();
         if (currentPiece == null) {
             System.out.println("No piece at specified position.");
-            return;
+            return false;
         }
 
         List<Position> possibleMoves = new ArrayList<>(currentPiece.possibleMoves(this));
         if (!possibleMoves.contains(toSlot)) {
             System.out.println("Illegal move.");
-            return;
+            return false;
         }
 
         Piece targetPiece = toSlot.getPiece();
         if (targetPiece != null && targetPiece.getColor() != null && currentPiece.getColor() != null &&
             targetPiece.getColor().isColor(currentPiece.getColor())) {
             System.out.println("Cannot capture your own piece.");
-            return;
+            return false;
         }
 
         fromSlot.setPiece(null);
         toSlot.setPiece(currentPiece);
         currentPiece.setPosition(toSlot);
+        return true;
     }
     
     /**
