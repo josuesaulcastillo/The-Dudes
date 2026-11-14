@@ -1,3 +1,4 @@
+package GUI;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -5,6 +6,8 @@ import java.io.InputStream;
 import java.nio.file.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+
+import Pieces.Piece;
 
 /**
  * Team piece display with custom PNG support
