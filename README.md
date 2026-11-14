@@ -18,7 +18,7 @@ java Main
 
 *Note: Currently, piece movement is not validated against possible moves, and as such checking is not implemented. Checkmating is done by capturing the king, which will close the game after the dialog closes.*
 
-**Settings:** Click on Settings in the top left corner. Then click Customize Board. Here you can choose the board color and size as well as the piece style: Classic, Blue / red, or Custom images. These will be saved alongside the game state. Custom piece PNGs are read from `Pieces/Images` (the twelve `white_*` and `black_*` PNG files); missing images fall back to classic symbols.
+**Settings:** Click on Settings in the top left corner. Then click Customize Board. Here you can choose the board color and size as well as the piece color. These will be saved alongside the game state.
 
 **Save and Load:** Click Game in the top left corner. Here you can create a new game, save your current game, or load a saved game. Games are saved as .chess files to your local computer.
 
