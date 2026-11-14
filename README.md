@@ -1,4 +1,4 @@
-﻿
+
 # The Dudes: Chess Project
 A chess gameplay project with saving and loading, user customization, and move history.
 
@@ -36,6 +36,3 @@ java Main
 - yqy19 | Mercury Ruane (@MercuryRuane)
 - qjn16 | Rue Taylor (@Birvenev)
 - puc14 | Josue Castillo (@josuesaulcastillo)
-
-
-

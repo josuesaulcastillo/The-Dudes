@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import GameState.Position;
@@ -56,7 +57,7 @@ public final class GuiFeaturesTest {
                     "Captured piece off board");
 
             game.setOptions(
-                    new SettingsDialog.Options(2, 1, 2));
+                    new SettingsDialog.Options(2, 2, 2));
 
             String expected = snapshot(game);
 
@@ -171,6 +172,7 @@ public final class GuiFeaturesTest {
             SwingUtilities.invokeAndWait(() -> {
                 checkViews(game);
                 checkBoardInput();
+                checkPieceImages(directory);
             });
 
             System.out.println(
@@ -246,6 +248,50 @@ public final class GuiFeaturesTest {
     }
 
     /**
+     * Checks that custom images in a separate directory are displayed
+     * and reused between piece redraws.
+     */
+    private static void checkPieceImages(Path directory) {
+        try {
+            Path imageDirectory = Files.createDirectory(
+                    directory.resolve("piece-images"));
+            BufferedImage source = new BufferedImage(
+                    24, 24, BufferedImage.TYPE_INT_ARGB);
+            source.setRGB(12, 12, 0xFF00FF00);
+            ImageIO.write(
+                    source, "png",
+                    imageDirectory.resolve("white_king.png").toFile());
+
+            ChessPieceDisplay display = new ChessPieceDisplay();
+            check(display.getImageDirectory().equals(
+                            Paths.get("Pieces", "Images")),
+                    "Default image folder matches the separated assets");
+            display.setImageDirectory(imageDirectory);
+            display.setPieceSize(48);
+            display.setColorStyle(2);
+            display.setPiece(new King(
+                    new GameState.Color("white"), null));
+
+            Icon customImage = display.getIcon();
+            check(customImage instanceof ImageIcon
+                            && ((ImageIcon) customImage).getIconWidth() == 48,
+                    "Custom images load from the configured folder");
+
+            display.setPiece(new King(
+                    new GameState.Color("white"), null));
+            check(display.getIcon() == customImage,
+                    "Custom image icon is reused between redraws");
+
+            display.setColorStyle(0);
+            check(display.getIcon() != customImage,
+                    "Classic piece style is separate from custom images");
+        } catch (IOException exception) {
+            throw new AssertionError(
+                    "Could not create custom piece image test", exception);
+        }
+    }
+
+    /**
      * Sends a mouse event directly to listeners for a deterministic
      * off-screen Swing input check.
      */
@@ -289,7 +335,7 @@ public final class GuiFeaturesTest {
         String before = boardText(game);
 
         for (int theme = 0; theme < 3; theme++) {
-            for (int pieces = 0; pieces < 2; pieces++) {
+            for (int pieces = 0; pieces < 3; pieces++) {
                 for (int size = 0; size < 3; size++) {
                     var options =
                             new SettingsDialog.Options(
