@@ -1,3 +1,4 @@
+package GameState;
 
 /**
  * Represents a chess game between two players.

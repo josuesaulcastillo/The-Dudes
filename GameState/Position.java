@@ -1,4 +1,7 @@
+package GameState;
 import java.util.Objects;
+
+import Pieces.Piece;
 
 public class Position {
     private int rank;
