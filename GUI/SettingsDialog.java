@@ -20,7 +20,7 @@ public final class SettingsDialog extends JDialog {
          */
         public Options {
             if (theme < 0 || theme > 2
-                    || pieces < 0 || pieces > 1
+                    || pieces < 0 || pieces > 2
                     || size < 0 || size > 2) {
                 throw new IllegalArgumentException(
                         "Invalid appearance settings.");
@@ -76,8 +76,9 @@ public final class SettingsDialog extends JDialog {
 
         JComboBox<String> pieces = new JComboBox<>(
                 new String[] {
-                    "Classic / custom images",
-                    "Blue / red"
+                    "Classic",
+                    "Blue / red",
+                    "Custom images"
                 });
 
         JComboBox<String> sizes = new JComboBox<>(
