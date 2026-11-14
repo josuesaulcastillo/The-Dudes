@@ -187,13 +187,6 @@ public class ChessBoardGUI extends JPanel {
     private MouseAdapter createMouseListener(Position square) {
         return new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent event) {
-                if (SwingUtilities.isLeftMouseButton(event) && squareClickListener != null) {
-                    squareClickListener.accept(square);
-                }
-            }
-
-            @Override
             public void mousePressed(MouseEvent event) {
                 if (SwingUtilities.isLeftMouseButton(event)) {
                     pressedPosition = square;
@@ -202,17 +195,32 @@ public class ChessBoardGUI extends JPanel {
 
             @Override
             public void mouseReleased(MouseEvent event) {
-                if (!SwingUtilities.isLeftMouseButton(event) || pressedPosition == null) {
+                if (pressedPosition == null) {
                     return;
                 }
+
+                Position start = pressedPosition;
+                pressedPosition = null;
+
+                if (!SwingUtilities.isLeftMouseButton(event)) {
+                    return;
+                }
+
                 Point point = SwingUtilities.convertPoint(
                         event.getComponent(), event.getPoint(), ChessBoardGUI.this);
                 Position releasedPosition = positionAt(point);
-                if (releasedPosition != null && !pressedPosition.equals(releasedPosition)
-                        && squareDragListener != null) {
-                    squareDragListener.accept(pressedPosition, releasedPosition);
+
+                if (releasedPosition == null) {
+                    return;
                 }
-                pressedPosition = null;
+
+                if (start.equals(releasedPosition)) {
+                    if (squareClickListener != null) {
+                        squareClickListener.accept(start);
+                    }
+                } else if (squareDragListener != null) {
+                    squareDragListener.accept(start, releasedPosition);
+                }
             }
         };
     }

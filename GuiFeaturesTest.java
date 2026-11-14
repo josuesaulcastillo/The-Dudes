@@ -1,8 +1,12 @@
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.image.BufferedImage;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.nio.file.*;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.*;
 
 /**
@@ -158,8 +162,10 @@ public final class GuiFeaturesTest {
                         "Invalid load preserves active game");
             }
 
-            SwingUtilities.invokeAndWait(
-                    () -> checkViews(game));
+            SwingUtilities.invokeAndWait(() -> {
+                checkViews(game);
+                checkBoardInput();
+            });
 
             System.out.println(
                     "All GUI-feature regression checks passed.");
@@ -171,6 +177,94 @@ public final class GuiFeaturesTest {
                         .toList()) {
                     Files.delete(path);
                 }
+            }
+        }
+    }
+
+    /**
+     * Checks click and drag gestures when press and release
+     * land on different Swing components of the board.
+     */
+    private static void checkBoardInput() {
+        ChessBoardGUI view = new ChessBoardGUI();
+        view.setSize(640, 640);
+        layout(view);
+
+        List<String> clicks = new ArrayList<>();
+        List<String> drags = new ArrayList<>();
+
+        view.setSquareClickListener(
+                position -> clicks.add(position.toString()));
+
+        view.setSquareDragListener(
+                (from, to) ->
+                        drags.add(from + "->" + to));
+
+        Container sourceSquare =
+                (Container) view.getComponent(0);
+        Component sourcePiece = sourceSquare.getComponent(0);
+
+        sendMouseEvent(
+                sourcePiece,
+                MouseEvent.MOUSE_PRESSED,
+                sourcePiece.getWidth() / 2,
+                sourcePiece.getHeight() / 2);
+
+        sendMouseEvent(
+                sourceSquare,
+                MouseEvent.MOUSE_RELEASED,
+                2,
+                2);
+
+        check(clicks.equals(List.of("A8")) && drags.isEmpty(),
+                "Click works across a piece label and its square");
+
+        Container targetSquare =
+                (Container) view.getComponent(1);
+        Component targetPiece = targetSquare.getComponent(0);
+
+        sendMouseEvent(
+                sourceSquare,
+                MouseEvent.MOUSE_PRESSED,
+                2,
+                2);
+
+        sendMouseEvent(
+                targetPiece,
+                MouseEvent.MOUSE_RELEASED,
+                targetPiece.getWidth() / 2,
+                targetPiece.getHeight() / 2);
+
+        check(drags.equals(List.of("A8->B8")),
+                "Drag works across board squares");
+    }
+
+    /**
+     * Sends a mouse event directly to listeners for a deterministic
+     * off-screen Swing input check.
+     */
+    private static void sendMouseEvent(
+            Component component,
+            int id,
+            int x,
+            int y) {
+
+        MouseEvent event = new MouseEvent(
+                component,
+                id,
+                System.currentTimeMillis(),
+                0,
+                x,
+                y,
+                1,
+                false,
+                MouseEvent.BUTTON1);
+
+        for (MouseListener listener : component.getMouseListeners()) {
+            if (id == MouseEvent.MOUSE_PRESSED) {
+                listener.mousePressed(event);
+            } else {
+                listener.mouseReleased(event);
             }
         }
     }
