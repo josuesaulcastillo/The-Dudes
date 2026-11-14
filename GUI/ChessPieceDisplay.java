@@ -4,21 +4,31 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import Pieces.Piece;
 
 /**
- * Team piece display with custom PNG support
- * and two visible color styles.
+ * Piece display with classic, blue/red, and custom image styles.
  */
 public class ChessPieceDisplay extends JLabel {
+
+    private record ImageKey(Path directory, String filename, int size) { }
+
+    private static final Map<ImageKey, ImageIcon> IMAGE_CACHE =
+            new HashMap<>();
+    private static final Set<ImageKey> MISSING_IMAGES =
+            new HashSet<>();
 
     private Piece displayedPiece;
 
     private Path imageDirectory =
-            Paths.get("assets", "pieces");
+            Paths.get("Pieces", "Images");
 
     private int pieceSize = 60;
     private int colorStyle;
@@ -85,11 +95,11 @@ public class ChessPieceDisplay extends JLabel {
     }
 
     /**
-     * Selects classic/custom images (0)
-     * or blue/red outlined symbols (1).
+     * Selects classic symbols (0), blue/red symbols (1),
+     * or custom images (2).
      */
     public void setColorStyle(int style) {
-        if (style < 0 || style > 1) {
+        if (style < 0 || style > 2) {
             throw new IllegalArgumentException(
                     "Invalid piece style.");
         }
@@ -104,13 +114,25 @@ public class ChessPieceDisplay extends JLabel {
      * Reloads the current custom image.
      */
     public void reloadImage() {
+        if (displayedPiece != null) {
+            String type = displayedPiece.getClass()
+                    .getSimpleName()
+                    .toLowerCase(java.util.Locale.ROOT);
+            String filename = (displayedPiece.getColor().isColor("white")
+                    ? "white_" : "black_") + type + ".png";
+            ImageKey key = new ImageKey(
+                    imageDirectory.toAbsolutePath().normalize(),
+                    filename,
+                    pieceSize);
+            synchronized (IMAGE_CACHE) {
+                IMAGE_CACHE.remove(key);
+                MISSING_IMAGES.remove(key);
+            }
+        }
         updateDisplay();
     }
 
-    /**
-     * Uses custom art for classic mode and
-     * readable outlined symbols otherwise.
-     */
+    /** Updates this label using its current style and piece. */
     private void updateDisplay() {
         setIcon(null);
         setText("");
@@ -129,18 +151,14 @@ public class ChessPieceDisplay extends JLabel {
 
         String label = (white ? "white " : "black ") + type;
 
-        BufferedImage image = colorStyle == 0
-                ? loadImage(
-                        (white ? "white_" : "black_")
-                                + type + ".png")
-                : null;
-
-        if (image != null) {
-            setIcon(new ImageIcon(
-                    image.getScaledInstance(
-                            pieceSize,
-                            pieceSize,
-                            Image.SCALE_SMOOTH)));
+        if (colorStyle == 2) {
+            ImageIcon image = loadImage(
+                    (white ? "white_" : "black_") + type + ".png");
+            if (image != null) {
+                setIcon(image);
+            } else {
+                setIcon(new ImageIcon(symbol(type, white)));
+            }
         } else {
             setIcon(new ImageIcon(symbol(type, white)));
         }
@@ -150,36 +168,81 @@ public class ChessPieceDisplay extends JLabel {
     }
 
     /**
-     * Loads a PNG from the existing team file
-     * or classpath locations.
+     * Loads and scales a PNG once for each folder, filename, and size.
      */
-    private BufferedImage loadImage(String filename) {
-        Path path = imageDirectory.resolve(filename);
+    private ImageIcon loadImage(String filename) {
+        Path directory = imageDirectory.toAbsolutePath().normalize();
+        ImageKey key = new ImageKey(directory, filename, pieceSize);
 
+        synchronized (IMAGE_CACHE) {
+            ImageIcon cached = IMAGE_CACHE.get(key);
+            if (cached != null) {
+                return cached;
+            }
+            if (MISSING_IMAGES.contains(key)) {
+                return null;
+            }
+
+            BufferedImage image = readImage(directory.resolve(filename), filename);
+            if (image == null) {
+                MISSING_IMAGES.add(key);
+                return null;
+            }
+
+            BufferedImage scaled = new BufferedImage(
+                    pieceSize, pieceSize, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D graphics = scaled.createGraphics();
+            try {
+                graphics.setRenderingHint(
+                        RenderingHints.KEY_INTERPOLATION,
+                        RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+                graphics.setRenderingHint(
+                        RenderingHints.KEY_RENDERING,
+                        RenderingHints.VALUE_RENDER_QUALITY);
+                graphics.drawImage(
+                        image, 0, 0, pieceSize, pieceSize, null);
+            } finally {
+                graphics.dispose();
+            }
+
+            ImageIcon icon = new ImageIcon(scaled);
+            IMAGE_CACHE.put(key, icon);
+            return icon;
+        }
+    }
+
+    private BufferedImage readImage(Path path, String filename) {
         try {
             if (Files.isRegularFile(path)) {
-                BufferedImage image =
-                        ImageIO.read(path.toFile());
-
+                BufferedImage image = ImageIO.read(path.toFile());
                 if (image != null) {
                     return image;
                 }
             }
-        } catch (IOException ignored) {
-            // Use the symbol fallback.
+        } catch (IOException exception) {
+            System.err.println("Could not read piece image: " + path
+                    + " (" + exception.getMessage() + ")");
         }
 
-        try (InputStream stream =
-                     getClass().getResourceAsStream(
-                             "/pieces/" + filename)) {
-
-            return stream == null
-                    ? null
-                    : ImageIO.read(stream);
-
-        } catch (IOException ignored) {
-            return null;
+        String[] resources = {
+            "/Pieces/Images/" + filename,
+            "/pieces/" + filename
+        };
+        for (String resource : resources) {
+            try (InputStream stream =
+                         getClass().getResourceAsStream(resource)) {
+                if (stream != null) {
+                    BufferedImage image = ImageIO.read(stream);
+                    if (image != null) {
+                        return image;
+                    }
+                }
+            } catch (IOException exception) {
+                System.err.println("Could not read piece image resource: "
+                        + resource + " (" + exception.getMessage() + ")");
+            }
         }
+        return null;
     }
 
     /**
@@ -238,7 +301,7 @@ public class ChessPieceDisplay extends JLabel {
                     -bounds.getCenterY());
 
             g.setColor(new java.awt.Color(
-                    colorStyle == 0
+                    colorStyle != 1
                             ? (white ? 0xFFFFFF : 0x202020)
                             : (white ? 0x2463CF : 0xB22222)));
 
