@@ -25,6 +25,9 @@ and Git to manage changes and collaborate.
 - UML diagrams and design patterns
 - Testing and debugging
 
+### Class Diagram
+See the [class UML diagram](docs/class-diagram.md).
+
 ### Team Workflow
 Team members work on separate branches and submit pull requests
 for review before merging changes into main.
