@@ -1,3 +1,4 @@
+package GUI;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -9,6 +10,10 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+
+import GameState.Board;
+import GameState.Position;
+import Pieces.Piece;
 
 /**
  * Swing view of an 8x8 chessboard, with White's pieces at the bottom.

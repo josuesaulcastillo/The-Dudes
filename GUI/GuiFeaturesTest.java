@@ -1,3 +1,4 @@
+package GUI;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.image.BufferedImage;
@@ -8,6 +9,11 @@ import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
+
+import GameState.Position;
+import Pieces.King;
+import Pieces.Pawn;
+import Pieces.Piece;
 
 /**
  * Standard-library regression checks.

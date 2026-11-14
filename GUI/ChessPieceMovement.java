@@ -1,4 +1,10 @@
+package GUI;
 import javax.swing.JOptionPane;
+
+import GameState.Board;
+import GameState.Position;
+import Pieces.King;
+import Pieces.Piece;
 
 public class ChessPieceMovement {
     private final Board board;

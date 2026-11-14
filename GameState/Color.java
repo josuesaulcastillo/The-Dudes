@@ -1,3 +1,4 @@
+package GameState;
 public class Color {
     /**
      * String saying either "white" or "black"

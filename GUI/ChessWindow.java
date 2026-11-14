@@ -1,3 +1,4 @@
+package GUI;
 import java.awt.BorderLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -6,6 +7,8 @@ import java.nio.file.Path;
 import java.util.Locale;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import Pieces.Piece;
 
 /**
  * Connects the team's board view to menus,

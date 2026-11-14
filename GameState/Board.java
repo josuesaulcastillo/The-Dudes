@@ -1,5 +1,14 @@
+package GameState;
 import java.util.ArrayList;
 import java.util.List;
+
+import Pieces.Bishop;
+import Pieces.King;
+import Pieces.Knight;
+import Pieces.Pawn;
+import Pieces.Piece;
+import Pieces.Queen;
+import Pieces.Rook;
 
 public class Board {
     private Position[][] board;

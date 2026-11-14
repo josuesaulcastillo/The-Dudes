@@ -1,3 +1,4 @@
+package GUI;
 import java.awt.*;
 import java.util.function.Consumer;
 import javax.swing.*;

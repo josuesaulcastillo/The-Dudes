@@ -1,8 +1,14 @@
+package GUI;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import GameState.Board;
+import GameState.Position;
+import Pieces.King;
+import Pieces.Piece;
 
 /**
  * Owns the GUI's only Board, its turn, completed moves, and settings.
