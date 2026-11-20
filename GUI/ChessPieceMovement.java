@@ -53,7 +53,13 @@ public class ChessPieceMovement {
             return;
         }
 
-        Piece capturedPiece = board.movePieceWithoutRuleValidation(source, destination);
+        Piece capturedPiece;
+        try {
+            capturedPiece = board.movePiece(source, destination);
+        } catch (Exception e) {
+            clearSelection();
+            return;
+        }
         clearSelection();
         chessBoardGUI.refresh(board);
 

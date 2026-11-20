@@ -154,19 +154,22 @@ public final class ChessSession {
             return false;
         }
 
-        Piece captured =
-                board.movePieceWithoutRuleValidation(
-                        source, destination);
+        Piece capturedPiece;
+        try {
+            capturedPiece = board.movePiece(source, destination);
+        } catch (Exception e) {
+            return false;
+        }
 
         moves.add(new Move(
                 from,
                 to,
                 moving.getClass().getSimpleName(),
                 whiteTurn,
-                captured));
+                capturedPiece));
 
         whiteTurn = !whiteTurn;
-        finished = captured instanceof King;
+        finished = capturedPiece instanceof King;
 
         return true;
     }

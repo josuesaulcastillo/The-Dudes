@@ -112,6 +112,7 @@ public class Board {
      * @param from the original position of the piece
      * @param to the position to move the piece to
      */
+    /*
     public boolean movePiece(Position from, Position to) {
         Position fromSlot = getBoardPosition(from);
         Position toSlot = getBoardPosition(to);
@@ -120,30 +121,35 @@ public class Board {
             return false;
         }
 
-        Piece currentPiece = fromSlot.getPiece();
-        if (currentPiece == null) {
+        Piece movingPiece = fromSlot.getPiece();
+        if (movingPiece == null) {
             System.out.println("No piece at specified position.");
             return false;
         }
 
-        List<Position> possibleMoves = new ArrayList<>(currentPiece.possibleMoves(this));
+        List<Position> possibleMoves = new ArrayList<>(movingPiece.possibleMoves(this));
         if (!possibleMoves.contains(toSlot)) {
             System.out.println("Illegal move.");
             return false;
         }
 
         Piece targetPiece = toSlot.getPiece();
-        if (targetPiece != null && targetPiece.getColor() != null && currentPiece.getColor() != null &&
-            targetPiece.getColor().isColor(currentPiece.getColor())) {
+        if (targetPiece != null && targetPiece.getColor() != null && movingPiece.getColor() != null &&
+            targetPiece.getColor().isColor(movingPiece.getColor())) {
             System.out.println("Cannot capture your own piece.");
             return false;
         }
 
+        Piece capturedPiece = toSlot.getPiece();
         fromSlot.setPiece(null);
-        toSlot.setPiece(currentPiece);
-        currentPiece.setPosition(toSlot);
-        return true;
+        toSlot.setPiece(movingPiece);
+        movingPiece.setPosition(toSlot);
+        if (capturedPiece != null) {
+            capturedPiece.setPosition(null);
+        }
+        return false;
     }
+    */
 
     /**
      * Moves a piece to a destination without checking chess rules.
@@ -153,7 +159,7 @@ public class Board {
      * @param to destination square
      * @return the piece removed from the destination, or null if it was empty
      */
-    public Piece movePieceWithoutRuleValidation(Position from, Position to) {
+    public Piece movePiece(Position from, Position to) {
         Position fromSlot = getBoardPosition(from);
         Position toSlot = getBoardPosition(to);
         if (fromSlot == null || toSlot == null) {
@@ -166,6 +172,11 @@ public class Board {
         Piece movingPiece = fromSlot.getPiece();
         if (movingPiece == null) {
             throw new IllegalStateException("There is no piece at the source position.");
+        }
+        
+        List<Position> possibleMoves = new ArrayList<>(movingPiece.possibleMoves(this));
+        if (!possibleMoves.contains(toSlot)) {
+            throw new IllegalArgumentException("That piece cannot move to that position.");
         }
 
         Piece capturedPiece = toSlot.getPiece();

@@ -107,7 +107,13 @@ public class Player {
                 continue;
             }
 
-            boolean hasMoved = board.movePiece(from, to);
+            boolean hasMoved = true;
+            try {
+                board.movePiece(from, to);
+            } catch (Exception e) {
+                hasMoved = false;
+            }
+
             if (hasMoved) {
                 validMove = true;
 
