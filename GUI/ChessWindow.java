@@ -135,7 +135,7 @@ public final class ChessWindow extends JFrame {
         JOptionPane.showMessageDialog(
                 this,
                 winner
-                        + " wins! The opponent's King was captured.",
+                        + " wins!",
                 "Game Over",
                 JOptionPane.INFORMATION_MESSAGE);
 
@@ -351,6 +351,10 @@ public final class ChessWindow extends JFrame {
 
         Color white = new Color("white");
         Color black = new Color("black");
+        if (session.board().isCheckmate(white) || session.board().isCheckmate(black)) {
+            finishGame();
+        }
+
         if (session.board().isCheck(white)) {
             boardView.highlightSquare(session.board().getKingPosition(white), 2);
         }
