@@ -140,12 +140,28 @@ public class Board {
         }
 
         Piece capturedPiece = toSlot.getPiece();
+        Position originalMovingPiecePosition = movingPiece.getPosition();
         fromSlot.setPiece(null);
         toSlot.setPiece(movingPiece);
         movingPiece.setPosition(toSlot);
+
         if (capturedPiece != null) {
             capturedPiece.setPosition(null);
         }
+
+        if (isCheck(movingPiece.getColor())) {
+            //return boardstate
+            fromSlot.setPiece(movingPiece);
+            toSlot.setPiece(capturedPiece);
+            movingPiece.setPosition(originalMovingPiecePosition);
+
+            if (capturedPiece != null) {
+                capturedPiece.setPosition(toSlot);
+            }
+
+            throw new IllegalArgumentException("That move leaves the king in check!");
+        }
+
         return capturedPiece;
     }
     

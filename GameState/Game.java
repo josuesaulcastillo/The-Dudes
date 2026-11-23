@@ -24,9 +24,6 @@ public class Game {
     /** Keeps track of whether the game is running. */
     private boolean gameRunning;
 
-    /** Keeps the visual window. */
-    private ChessWindow chessWindow;
-
     /**
      * Creates a new chess game.
      */
