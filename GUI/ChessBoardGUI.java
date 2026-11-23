@@ -26,11 +26,12 @@ public class ChessBoardGUI extends JPanel {
     private final JPanel[][] squares = new JPanel[BOARD_SIZE][BOARD_SIZE];
     private final ChessPieceDisplay[][] pieceLabels =
             new ChessPieceDisplay[BOARD_SIZE][BOARD_SIZE];
-    private final boolean[][] highlights = new boolean[BOARD_SIZE][BOARD_SIZE];
+    private final int[][] highlights = new int[BOARD_SIZE][BOARD_SIZE];
 
     private java.awt.Color lightColor = new java.awt.Color(238, 238, 210);
     private java.awt.Color darkColor = new java.awt.Color(118, 150, 86);
-    private java.awt.Color highlightColor = new java.awt.Color(245, 235, 100);
+    private java.awt.Color yellowHighlightColor = new java.awt.Color(245, 235, 100);
+    private java.awt.Color redHighlightColor = new java.awt.Color(255, 0, 0);
 
     private Consumer<Position> squareClickListener;
     private BiConsumer<Position, Position> squareDragListener;
@@ -159,9 +160,14 @@ public class ChessBoardGUI extends JPanel {
         }
     }
 
-    /** Highlights a square, or clears that square's highlight. */
-    public void highlightSquare(Position position, boolean show) {
-        highlights[rowOf(position)][colOf(position)] = show;
+    /** Highlights a square, or clears that square's highlight. 
+     * color:
+     * 1 = yellow
+     * 2 = red
+     * anything else = default
+    */
+    public void highlightSquare(Position position, int color) {
+        highlights[rowOf(position)][colOf(position)] = color;
         updateSquareColors();
     }
 
@@ -169,20 +175,28 @@ public class ChessBoardGUI extends JPanel {
     public void clearHighlights() {
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
-                highlights[row][col] = false;
+                highlights[row][col] = 0;
             }
         }
         updateSquareColors();
     }
 
+    /**
+     * Updates colors of each square
+     */
     private void updateSquareColors() {
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
                 if (squares[row][col] != null) {
                     java.awt.Color color = (row + col) % 2 == 0
                             ? lightColor : darkColor;
-                    squares[row][col].setBackground(
-                            highlights[row][col] ? highlightColor : color);
+                    if (highlights[row][col] == 2) {
+                        squares[row][col].setBackground(redHighlightColor);
+                    } else if (highlights[row][col] == 1) {
+                        squares[row][col].setBackground(yellowHighlightColor);
+                    } else {
+                        squares[row][col].setBackground(color);
+                    }
                 }
             }
         }

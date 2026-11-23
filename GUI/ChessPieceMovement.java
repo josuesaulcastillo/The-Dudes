@@ -27,7 +27,7 @@ public class ChessPieceMovement {
         if (selectedSquare == null) {
             if (board.getPiece(square) != null) {
                 selectedSquare = square;
-                chessBoardGUI.highlightSquare(square, true);
+                chessBoardGUI.highlightSquare(square, 1);
             }
             return;
         }
@@ -53,7 +53,13 @@ public class ChessPieceMovement {
             return;
         }
 
-        Piece capturedPiece = board.movePieceWithoutRuleValidation(source, destination);
+        Piece capturedPiece;
+        try {
+            capturedPiece = board.movePiece(source, destination);
+        } catch (Exception e) {
+            clearSelection();
+            return;
+        }
         clearSelection();
         chessBoardGUI.refresh(board);
 

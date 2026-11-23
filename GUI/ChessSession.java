@@ -130,8 +130,9 @@ public final class ChessSession {
     }
 
     /**
-     * Applies a Phase 2 move.
      * Rejects empty sources, wrong turns, and friendly captures.
+     * 
+     * returns false if move not made
      */
     public boolean move(String from, String to) {
         Position source = position(from);
@@ -154,19 +155,22 @@ public final class ChessSession {
             return false;
         }
 
-        Piece captured =
-                board.movePieceWithoutRuleValidation(
-                        source, destination);
+        Piece capturedPiece;
+        try {
+            capturedPiece = board.movePiece(source, destination);
+        } catch (Exception e) {
+            return false;
+        }
 
         moves.add(new Move(
                 from,
                 to,
                 moving.getClass().getSimpleName(),
                 whiteTurn,
-                captured));
+                capturedPiece));
 
         whiteTurn = !whiteTurn;
-        finished = captured instanceof King;
+        finished = capturedPiece instanceof King;
 
         return true;
     }

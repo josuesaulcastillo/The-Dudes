@@ -44,4 +44,11 @@ public class Color {
         }
         return this.color.equals(other.color);
     }
+
+    public void setColor(String color) {
+        if (color != "white" && color != "black") {
+            throw new IllegalArgumentException("Incorrect color (must be 'white' or 'black').");
+        }
+        this.color = color;
+    }
 }

@@ -1,5 +1,8 @@
 package GameState;
 
+import GUI.ChessBoardGUI;
+import GUI.ChessWindow;
+
 /**
  * Represents a chess game between two players.
  * Manages the board, players, and turns.

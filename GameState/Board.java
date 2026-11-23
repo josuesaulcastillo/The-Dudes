@@ -106,46 +106,6 @@ public class Board {
     }
 
     /**
-     * If possible, moves a piece from one position on the board
-     * to the other.
-     * 
-     * @param from the original position of the piece
-     * @param to the position to move the piece to
-     */
-    public boolean movePiece(Position from, Position to) {
-        Position fromSlot = getBoardPosition(from);
-        Position toSlot = getBoardPosition(to);
-        if (fromSlot == null || toSlot == null) {
-            System.out.println("Invalid board position.");
-            return false;
-        }
-
-        Piece currentPiece = fromSlot.getPiece();
-        if (currentPiece == null) {
-            System.out.println("No piece at specified position.");
-            return false;
-        }
-
-        List<Position> possibleMoves = new ArrayList<>(currentPiece.possibleMoves(this));
-        if (!possibleMoves.contains(toSlot)) {
-            System.out.println("Illegal move.");
-            return false;
-        }
-
-        Piece targetPiece = toSlot.getPiece();
-        if (targetPiece != null && targetPiece.getColor() != null && currentPiece.getColor() != null &&
-            targetPiece.getColor().isColor(currentPiece.getColor())) {
-            System.out.println("Cannot capture your own piece.");
-            return false;
-        }
-
-        fromSlot.setPiece(null);
-        toSlot.setPiece(currentPiece);
-        currentPiece.setPosition(toSlot);
-        return true;
-    }
-
-    /**
      * Moves a piece to a destination without checking chess rules.
      * Any piece already at the destination is removed from the board.
      *
@@ -153,7 +113,7 @@ public class Board {
      * @param to destination square
      * @return the piece removed from the destination, or null if it was empty
      */
-    public Piece movePieceWithoutRuleValidation(Position from, Position to) {
+    public Piece movePiece(Position from, Position to) {
         Position fromSlot = getBoardPosition(from);
         Position toSlot = getBoardPosition(to);
         if (fromSlot == null || toSlot == null) {
@@ -167,26 +127,47 @@ public class Board {
         if (movingPiece == null) {
             throw new IllegalStateException("There is no piece at the source position.");
         }
+        
+        Color currentColor = movingPiece.getColor();
+        Color oppColor = new Color("white");
+        if (currentColor.isColor("white")) {
+            oppColor.setColor("black");
+        }
+        
+        List<Position> possibleMoves = new ArrayList<>(movingPiece.possibleMoves(this));
+        if (!possibleMoves.contains(toSlot)) {
+            throw new IllegalArgumentException("That piece cannot move to that position.");
+        }
 
         Piece capturedPiece = toSlot.getPiece();
+        Position originalMovingPiecePosition = movingPiece.getPosition();
         fromSlot.setPiece(null);
         toSlot.setPiece(movingPiece);
         movingPiece.setPosition(toSlot);
+
         if (capturedPiece != null) {
             capturedPiece.setPosition(null);
         }
+
+        if (isCheck(movingPiece.getColor())) {
+            //return boardstate
+            fromSlot.setPiece(movingPiece);
+            toSlot.setPiece(capturedPiece);
+            movingPiece.setPosition(originalMovingPiecePosition);
+
+            if (capturedPiece != null) {
+                capturedPiece.setPosition(toSlot);
+            }
+
+            throw new IllegalArgumentException("That move leaves the king in check!");
+        }
+
         return capturedPiece;
     }
     
-    /**
-     * Returns a boolean of whether a specified color is in check.
-     * 
-     * @param color the color to check
-     * @return boolean of whether that color is in check
-     */
-    public boolean isCheck(Color color) {
+    public Position getKingPosition(Color color) {
         if (color == null) {
-            return false;
+            throw new IllegalArgumentException("King color is undefined.");
         }
 
         Position kingPosition = null;
@@ -205,8 +186,24 @@ public class Board {
         }
 
         if (kingPosition == null) {
-            return false;
+            throw new IllegalStateException(color + " has no king.");
         }
+
+        return kingPosition;
+
+    }
+
+    /**
+     * Returns a boolean of whether a specified color is in check.
+     * 
+     * @param color the color to check
+     * @return boolean of whether that color is in check
+     */
+    public boolean isCheck(Color color) {        
+        if (color == null) {
+            throw new IllegalArgumentException("isCheck color is undefined.");
+        }
+        Position kingPosition = getKingPosition(color);
 
         for (int file = 0; file < board.length; file++) {
             for (int rank = 0; rank < board[file].length; rank++) {
