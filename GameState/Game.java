@@ -1,5 +1,8 @@
 package GameState;
 
+import GUI.ChessBoardGUI;
+import GUI.ChessWindow;
+
 /**
  * Represents a chess game between two players.
  * Manages the board, players, and turns.
@@ -20,6 +23,9 @@ public class Game {
 
     /** Keeps track of whether the game is running. */
     private boolean gameRunning;
+
+    /** Keeps the visual window. */
+    private ChessWindow chessWindow;
 
     /**
      * Creates a new chess game.

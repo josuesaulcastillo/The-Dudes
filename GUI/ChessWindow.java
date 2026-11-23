@@ -9,6 +9,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import Pieces.Piece;
+import GameState.Color;;
 
 /**
  * Connects the team's board view to menus,
@@ -16,10 +17,8 @@ import Pieces.Piece;
  */
 public final class ChessWindow extends JFrame {
 
+    private final ChessBoardGUI boardView;
     private ChessSession session = new ChessSession();
-
-    private final ChessBoardGUI boardView =
-            new ChessBoardGUI();
 
     private final GameHistoryPanel history =
             new GameHistoryPanel(this::undo);
@@ -35,7 +34,7 @@ public final class ChessWindow extends JFrame {
     public ChessWindow() {
         super("The Dudes - Chess");
 
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         setJMenuBar(new GameMenuBar(
                 this::newGame,
@@ -43,6 +42,7 @@ public final class ChessWindow extends JFrame {
                 this::loadGame,
                 this::settings));
 
+        boardView = new ChessBoardGUI();
         add(boardView, BorderLayout.CENTER);
         add(history, BorderLayout.EAST);
 
@@ -73,6 +73,11 @@ public final class ChessWindow extends JFrame {
         refresh();
 
         setLocationRelativeTo(null);
+    }
+
+    /** Gets the board GUI */
+    public ChessBoardGUI getBoardGUI() {
+        return boardView;
     }
 
     /**
@@ -341,7 +346,17 @@ public final class ChessWindow extends JFrame {
 
         if (selected != null) {
             boardView.highlightSquare(
-                    ChessSession.position(selected), true);
+                    ChessSession.position(selected), 1);
+        }
+
+        Color white = new Color("white");
+        Color black = new Color("black");
+        if (session.board().isCheck(white)) {
+            boardView.highlightSquare(session.board().getKingPosition(white), 2);
+        }
+
+        if (session.board().isCheck(black)) {
+            boardView.highlightSquare(session.board().getKingPosition(black), 2);
         }
 
         history.refresh(session);

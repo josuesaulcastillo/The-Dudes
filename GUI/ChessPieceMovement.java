@@ -27,7 +27,7 @@ public class ChessPieceMovement {
         if (selectedSquare == null) {
             if (board.getPiece(square) != null) {
                 selectedSquare = square;
-                chessBoardGUI.highlightSquare(square, true);
+                chessBoardGUI.highlightSquare(square, 1);
             }
             return;
         }

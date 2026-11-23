@@ -130,8 +130,9 @@ public final class ChessSession {
     }
 
     /**
-     * Applies a Phase 2 move.
      * Rejects empty sources, wrong turns, and friendly captures.
+     * 
+     * returns false if move not made
      */
     public boolean move(String from, String to) {
         Position source = position(from);
