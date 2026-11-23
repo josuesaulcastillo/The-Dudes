@@ -181,6 +181,9 @@ public class ChessBoardGUI extends JPanel {
         updateSquareColors();
     }
 
+    /**
+     * Updates colors of each square
+     */
     private void updateSquareColors() {
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
@@ -189,10 +192,8 @@ public class ChessBoardGUI extends JPanel {
                             ? lightColor : darkColor;
                     if (highlights[row][col] == 2) {
                         squares[row][col].setBackground(redHighlightColor);
-                        System.out.println("Changed color of " + row + " " + col + " to red");
                     } else if (highlights[row][col] == 1) {
                         squares[row][col].setBackground(yellowHighlightColor);
-                        System.out.println("Changed color of " + row + " " + col + " to yellow");
                     } else {
                         squares[row][col].setBackground(color);
                     }
